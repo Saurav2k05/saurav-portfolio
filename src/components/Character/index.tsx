@@ -1,7 +1,8 @@
-import Scene from "./Scene";
+import PhotoScene from "./PhotoScene";
 
 const CharacterModel = () => {
-  return <Scene />;
+  return <PhotoScene />;
 };
 
 export default CharacterModel;
+

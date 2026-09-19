@@ -1,0 +1,280 @@
+.photo-scene-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1200px;
+}
+
+
+/* On desktop, keep it centered horizontally and slightly lower to match hero title */
+.photo-card-wrapper {
+  position: relative;
+  width: min(380px, 85vw);
+  height: min(510px, 68vh);
+  pointer-events: auto;
+  transform-style: preserve-3d;
+  will-change: transform;
+  margin-top: 2vh;
+  cursor: grab;
+  transition: filter 0.3s ease;
+}
+
+.photo-card-wrapper:active {
+  cursor: grabbing;
+}
+
+/* Ambient Backlight Rim Glow (like the original 3D character glow) */
+.photo-aura-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120%;
+  height: 120%;
+  transform: translate(-50%, -50%) translateZ(-30px);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(251, 141, 255, 0.45) 0%,
+    rgba(84, 0, 255, 0.35) 45%,
+    transparent 75%
+  );
+  filter: blur(45px);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: auraPulse 6s ease-in-out infinite alternate;
+  z-index: 1;
+}
+
+@keyframes auraPulse {
+  0% {
+    transform: translate(-50%, -50%) translateZ(-30px) scale(0.92);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(-50%, -50%) translateZ(-30px) scale(1.1);
+    opacity: 1;
+  }
+}
+
+/* Smooth lifelike floating */
+.photo-floating-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: floatLevitate 5s ease-in-out infinite alternate;
+}
+
+@keyframes floatLevitate {
+  0% {
+    transform: translateY(0px) rotateZ(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotateZ(0.5deg);
+  }
+  100% {
+    transform: translateY(6px) rotateZ(-0.5deg);
+  }
+}
+
+/* 3D Glass Card Container */
+.photo-card-glass {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 28px;
+  overflow: hidden;
+  background: linear-gradient(
+    145deg,
+    rgba(25, 20, 35, 0.85) 0%,
+    rgba(15, 12, 22, 0.95) 100%
+  );
+  border: 1px solid rgba(251, 141, 255, 0.25);
+  box-shadow: 
+    0 25px 60px -15px rgba(0, 0, 0, 0.8),
+    0 0 35px rgba(138, 43, 226, 0.25),
+    inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  transform-style: preserve-3d;
+}
+
+/* The User Portrait Image */
+.photo-image-element {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  filter: saturate(1.08) contrast(1.04);
+}
+
+.photo-card-wrapper:hover .photo-image-element {
+  transform: scale(1.03);
+}
+
+/* Dynamic Interactive Glare Reflection that moves with cursor */
+.photo-glare-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 28px;
+  mix-blend-mode: overlay;
+  opacity: 0.65;
+  transition: opacity 0.3s ease;
+  z-index: 4;
+}
+
+/* Cyber holographic subtle lines */
+.photo-scanline {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(0, 0, 0, 0.15) 51%
+  );
+  background-size: 100% 4px;
+  opacity: 0.35;
+  pointer-events: none;
+  border-radius: 28px;
+  z-index: 3;
+}
+
+/* Bottom 3D floating tag / badge */
+.photo-badge-container {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%) translateZ(45px);
+  width: calc(100% - 36px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(12, 10, 18, 0.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  z-index: 5;
+  pointer-events: none;
+}
+
+.photo-badge-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.photo-badge-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background-color: #00ff88;
+  box-shadow: 0 0 10px #00ff88;
+  animation: badgeDotPulse 2s infinite ease-in-out;
+}
+
+@keyframes badgeDotPulse {
+  0%, 100% {
+    transform: scale(0.9);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+}
+
+.photo-badge-name {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  color: #ffffff;
+  font-family: "Geist", sans-serif;
+}
+
+.photo-badge-role {
+  font-size: 11px;
+  color: #c8bfff;
+  letter-spacing: 0.5px;
+  font-family: "Geist", sans-serif;
+}
+
+.photo-badge-tag {
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: 12px;
+  background: rgba(251, 141, 255, 0.18);
+  border: 1px solid rgba(251, 141, 255, 0.35);
+  color: #fb8dff;
+  font-weight: 500;
+}
+
+/* Floating interactive particles / glowing stars around the card */
+.photo-orbit-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 125%;
+  height: 125%;
+  transform: translate(-50%, -50%) rotateX(65deg);
+  border: 1px dashed rgba(251, 141, 255, 0.2);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: orbitRotate 22s linear infinite;
+  z-index: 0;
+}
+
+@keyframes orbitRotate {
+  0% {
+    transform: translate(-50%, -50%) rotateX(65deg) rotateZ(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotateX(65deg) rotateZ(360deg);
+  }
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 1024px) {
+  .photo-scene-container {
+    position: relative;
+    height: 60vh;
+    margin-top: 20px;
+    margin-bottom: 30px;
+  }
+
+  .photo-card-wrapper {
+    width: min(320px, 80vw);
+    height: min(440px, 55vh);
+  }
+
+  .photo-badge-container {
+    bottom: 12px;
+    padding: 8px 12px;
+  }
+
+  .photo-badge-name {
+    font-size: 12px;
+  }
+
+  .photo-badge-role {
+    font-size: 10px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .photo-card-wrapper {
+    width: min(290px, 78vw);
+    height: min(390px, 50vh);
+  }
+}

@@ -10,6 +10,10 @@ const __dirname = path.dirname(__filename);
 // Ensure generated project preview images are copied into public/images
 const imagesToCopy = [
   {
+    src: "C:\\Users\\asus\\.gemini\\antigravity-ide\\brain\\6935afc2-789e-448b-b0ab-6a1b2b14a39a\\.user_uploaded\\media_1789825013154.jpg",
+    dest: "public/images/profile.jpg",
+  },
+  {
     src: "C:\\Users\\asus\\.gemini\\antigravity-ide\\brain\\cd07422d-aeac-4efc-bc83-617278eb119c\\agriconnect_preview_1789232380461.jpg",
     dest: "public/images/agriconnect.jpg",
   },
@@ -40,5 +44,27 @@ for (const img of imagesToCopy) {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    {
+      name: "profile-image-serve",
+      configureServer(server) {
+        server.middlewares.use((req, res, next) => {
+          if (
+            req.url === "/images/profile.jpg" ||
+            req.url === "/images/profile.png"
+          ) {
+            const userUploadPath =
+              "C:\\Users\\asus\\.gemini\\antigravity-ide\\brain\\6935afc2-789e-448b-b0ab-6a1b2b14a39a\\.user_uploaded\\media_1789825013154.jpg";
+            if (fs.existsSync(userUploadPath)) {
+              res.setHeader("Content-Type", "image/jpeg");
+              return fs.createReadStream(userUploadPath).pipe(res);
+            }
+          }
+          next();
+        });
+      },
+    },
+  ],
 });
+
